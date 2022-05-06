@@ -8,6 +8,6 @@ El siguiente repositorio contiene ejemplos de como se puede trabajar usando Shad
 - React
 
 ## Enlaces importantes
-- Tutorial: 
+- Tutorial: https://youtu.be/ttbJUIxsH94
 - Canal de Youtube: https://www.youtube.com/c/JohnScript72
 - Shaders Book: https://thebookofshaders.com/glossary/
