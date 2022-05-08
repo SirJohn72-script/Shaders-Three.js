@@ -13,7 +13,7 @@ const camera = new THREE.PerspectiveCamera(
   100
 )
 scene.add(camera)
-camera.position.set(5, 5, 5)
+camera.position.set(10, 10, 10)
 camera.lookAt(new THREE.Vector3())
 
 const renderer = new THREE.WebGLRenderer()
@@ -38,19 +38,38 @@ const resize = () => {
 }
 window.addEventListener("resize", resize)
 
+//Texture
+const billete = new THREE.TextureLoader().load(
+  "./billete.jpg"
+)
+
 const planeMaterial = new THREE.ShaderMaterial({
   side: THREE.DoubleSide,
+  uniforms: {
+    uBillete: { value: billete },
+    uTime: { value: 0.0 },
+  },
   vertexShader: `
+     varying vec2 vUv;   
+     uniform float uTime;
+
      void main(){
         vec4 modelPosition = modelMatrix * vec4(position,1);
+        modelPosition.z += sin(modelPosition.x * 15.0 + uTime) * 0.2;
         gl_Position = projectionMatrix * 
                           viewMatrix *
                           modelPosition;
+        
+        vUv = uv;
     }
   `,
   fragmentShader: `
+    uniform sampler2D uBillete;
+    varying vec2 vUv;
+
     void main(){
-        gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+        vec4 texturaBillete = texture2D(uBillete, vec2(vUv.x, vUv.y));
+        gl_FragColor = texturaBillete;
     }
   `,
 })
@@ -62,8 +81,18 @@ const planeGeometry = new THREE.PlaneBufferGeometry(
   100
 )
 const plane = new THREE.Mesh(planeGeometry, planeMaterial)
-plane.rotation.x = Math.PI * -0.5
+// plane.rotation.x = Math.PI * -0.5
 scene.add(plane)
+
+//animate
+const animate = () => {
+  planeMaterial.uniforms.uTime.value += 0.01
+
+  orbitControls.update()
+  renderer.render(scene, camera)
+  requestAnimationFrame(animate)
+}
+animate()
 
 //axes helper
 const axesHelper = new THREE.AxesHelper(5)
@@ -72,14 +101,6 @@ scene.add(axesHelper)
 //grid helper
 const size = 10
 const divisions = 10
-
-//animate
-const animate = () => {
-  orbitControls.update()
-  renderer.render(scene, camera)
-  requestAnimationFrame(animate)
-}
-animate()
 
 const gridHelper = new THREE.GridHelper(size, divisions)
 scene.add(gridHelper)
