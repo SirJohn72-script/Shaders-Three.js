@@ -1,7 +1,8 @@
 // import Base from "./components/ShaderBase/Base"
 // import Ola from "./components/Ola/Ola"
 // import Billete from "./components/Billete/Billete"
-import Mountain from "./components/Montania/Montain"
+// import Mountain from "./components/Montania/Montain"
+import Portal from "./components/Portal/Portal"
 
 function App() {
   return (
@@ -9,7 +10,8 @@ function App() {
       {/* <Base /> */}
       {/* <Ola /> */}
       {/* <Billete /> */}
-      <Mountain />
+      {/* <Mountain /> */}
+      <Portal />
     </>
   )
 }
